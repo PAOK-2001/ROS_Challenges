@@ -1,0 +1,5 @@
+<launch>
+    <node name="process_node" pkg="week1_signal_nodes" type="process.py" output="screen"/>
+    <node name="signal_generator_node" pkg="week1_signal_nodes" type="signal_generator_node" output="screen" launch-prefix="gnome-terminal --command"/>
+    <node name="signal_generator_plot" pkg="rqt_plot" type="rqt_plot" args="/signal"/>
+</launch>
