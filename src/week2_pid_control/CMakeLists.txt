@@ -60,6 +60,9 @@ include_directories(
 add_executable(controller src/controller_node.cpp)
 target_link_libraries(controller ${catkin_LIBRARIES})
 
+add_executable(setpoint_generator src/setpoint_generator.cpp)
+target_link_libraries(setpoint_generator ${catkin_LIBRARIES})
+
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use

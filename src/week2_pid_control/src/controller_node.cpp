@@ -40,13 +40,13 @@ int main(int argc, char* argv[]){
         ros::param::get("/set_point",ref);
         dTime = ros::Time::now().toSec()- time;
         time = ros::Time::now().toSec();
-
+        
         if(dTime > 0) {
           error = ref - motor_out;
           cumError += error*dTime;
           rateError = (error - lastError) / dTime;
           lastError = error;
-          motor_in.input = Kp*error+Td*rateError+Ti*cumError;
+          motor_in.input = (Kp*error)+(Td*rateError)+(Ti*cumError);
           controllerOutput.publish(motor_in);
         }
         ros::spinOnce();
