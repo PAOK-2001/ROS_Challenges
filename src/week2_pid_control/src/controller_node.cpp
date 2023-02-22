@@ -7,7 +7,6 @@
 #include <iostream>
 #include "week2_pid_control/motor_input.h"
 #include "week2_pid_control/motor_output.h" 
-//#include "week2_pid_control/set_point.h"
 
 float motor_out;
 
@@ -49,7 +48,6 @@ int main(int argc, char* argv[]){
           lastError = error;
           motor_in.input = Kp*error+Td*rateError+Ti*cumError;
           controllerOutput.publish(motor_in);
-          //std::cout << motor_out << std::endl;
         }
         ros::spinOnce();
         rate.sleep();
