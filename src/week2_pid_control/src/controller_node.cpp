@@ -7,13 +7,12 @@
 #include <iostream>
 #include "week2_pid_control/motor_input.h"
 #include "week2_pid_control/motor_output.h" 
-#include "week2_pid_control/set_point.h"
+//#include "week2_pid_control/set_point.h"
 
 float motor_out;
 
 void receive_feedback(const week2_pid_control::motor_output::ConstPtr &msg) {
-  std::cout << "Si caben o no?" << std::endl;
-   motor_out = msg->output;
+  motor_out = msg->output;
 }
 
 int main(int argc, char* argv[]){
@@ -48,11 +47,11 @@ int main(int argc, char* argv[]){
           cumError += error*dTime;
           rateError = (error - lastError) / dTime;
           lastError = error;
-          motor_in.input = Kp*error;
+          motor_in.input = Kp*error+Td*rateError+Ti*cumError;
           controllerOutput.publish(motor_in);
-          std::cout << motor_out << "\n";
+          //std::cout << motor_out << std::endl;
         }
-
+        ros::spinOnce();
         rate.sleep();
     }
 }
