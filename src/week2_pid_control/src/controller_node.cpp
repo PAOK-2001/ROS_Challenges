@@ -46,15 +46,13 @@ int main(int argc, char* argv[]){
   while (ros::ok()) {
         
         dTime = ros::Time::now().toSec()- time;
-        std::cout << dTime << "\n";
-        const float minDeltaTime = 0.0001;
-        if(dTime > minDeltaTime && motor_init) {
+        if(dTime > 0 && motor_init) {
           time = ros::Time::now().toSec();
           error = ref - motor_out;
           cumError += error*dTime;
           rateError = (error - lastError) / dTime;
           lastError = error;
-          motor_in.input = (Kp*error)+(Td*minDeltaTime*rateError)+(Ti*cumError);
+          motor_in.input = (Kp*error)+(Td*rateError)+(Ti*cumError);
           controllerOutput.publish(motor_in);
         } else {
           week2_pid_control::motor_input motor_in;
