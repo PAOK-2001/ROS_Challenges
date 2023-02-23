@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<launch>  
+    <group ns = "Group1">
+        <node name="talker" pkg="week2_activity" type="talker.py" output="screen" />
+        <node name="listener" pkg="week2_activity" type="listener.py" output="screen" />
+    </group>
+    <group ns = "Group2">
+        <node name="talker" pkg="week2_activity" type="talker.py" output="screen" />
+        <node name="listener" pkg="week2_activity" type="listener.py" output="screen" />
+    </group>
+
+</launch>

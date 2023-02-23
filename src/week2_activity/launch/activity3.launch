@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<launch>
+
+    <rosparam file = "$(find week2_activity)/config/params.yaml" command = "load" />
+    
+	<group ns = "Group1">
+        <node name="talkerG1" pkg="week2_activity" type="talker.py" output="screen" />
+        <node name="listenerG1" pkg="week2_activity" type="listener.py" output="screen" />
+    </group>
+
+    <group ns = "Group2">
+        <node name="talkerG2" pkg="week2_activity" type="talker.py" output="screen" />
+        <node name="listenerG2" pkg="week2_activity" type="listener.py" output="screen" />
+    </group>
+
+</launch>
