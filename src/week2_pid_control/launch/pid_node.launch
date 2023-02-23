@@ -3,7 +3,8 @@
     <rosparam file = "$(find week2_pid_control)/config/system_params.yaml" command = "load"/>
     <param name="set_point" value="5" />
     
-    <node name="controller" pkg="week2_pid_control" type="controller"  output="screen"/>
-    <node name="system"     pkg="week2_pid_control" type="system.py"            output="screen"/>
     <node name="system_response_plot" pkg="rqt_plot" type="rqt_plot" args="/set_point /motor_output/output /motor_input/input"/>
+
+    <node name="system"     pkg="week2_pid_control" type="system.py"            output="screen"/>
+    <node name="controller" pkg="week2_pid_control" type="controller"  output="screen"/>
 </launch>
