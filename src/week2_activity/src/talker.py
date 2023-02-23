@@ -11,12 +11,19 @@ if __name__ == '__main__':
         #first param attempt
         #hello_str = rospy.get_param("/Message", "No Parameter Found")  + " " + str(rospy.get_time())
         #global param
-        #hello_str = rospy.get_param("/Message", "No Parameter Found")  + " " + str(rospy.get_time())
-        #local param
-        #hello_str = rospy.get_param("Message", "No Parameter Found")  + " " + str(rospy.get_time())
-        #private param
-        hello_str = rospy.get_param("~Message", "No Parameter Found")  + " " + str(rospy.get_time())
+        hello_str = "Global param: " + rospy.get_param("/Message", "No Parameter Found")  + " " + str(rospy.get_time())
         rospy.loginfo(hello_str)
         pub.publish(hello_str)
+        #local param
+        hello_str = "Local param: " + rospy.get_param("Message", "No Parameter Found")  + " " + str(rospy.get_time())
+        rospy.loginfo(hello_str)
+        pub.publish(hello_str)
+        
+        #private param
+        hello_str = "Private param: " + rospy.get_param("~Message", "No Parameter Found")  + " " + str(rospy.get_time())
+        rospy.loginfo(hello_str)
+        pub.publish(hello_str)
+        
+        #hello_str = "hello world %s" %rospy.get_time()
         
         rate.sleep()
