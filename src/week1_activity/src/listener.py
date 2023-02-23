@@ -7,5 +7,5 @@ def callback(msg):
         
 if __name__ =='__main__':
     rospy.init_node("listener")
-    rospy.Subscriber("chatter", String, callback)
+    rospy.Subscriber("/chatter", String, callback)
     rospy.spin()
