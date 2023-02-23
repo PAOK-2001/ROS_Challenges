@@ -1,0 +1,5 @@
+<?xml version="1.0" ?>
+<launch>
+    <node name="talker" pkg="week1_activity" type="talker.py" output="screen" />
+    <node name="listener" pkg="week1_activity" type="listener.py" output="screen" />
+</launch>
