@@ -1,0 +1,4 @@
+<launch>
+    <!--<node name="process_node" pkg="week2_activity" type="process.py" output="screen"/> -->
+    <node name="signal_generator_node" pkg="week2_activity" type="signal_generator.py" output="screen"/>
+</launch>
