@@ -44,7 +44,7 @@ int main(int argc, char* argv[]){
   motor_in.input = 0.0;
   controllerOutput.publish(motor_in);
   while (ros::ok()) {
-        
+    
         dTime = ros::Time::now().toSec()- time;
         if(dTime > 0 && motor_init) {
           time = ros::Time::now().toSec();
