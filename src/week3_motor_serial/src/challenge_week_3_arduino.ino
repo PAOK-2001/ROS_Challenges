@@ -15,7 +15,7 @@ void pwmCallback(const std_msgs::Float32 &pwmMsg) {
 }
 
 ros::NodeHandle nh;
-ros::Subscriber<std_msgs::UInt8> sub("/pwm", &pwmCallback);
+ros::Subscriber<std_msgs::Float32> sub("/pwm", &pwmCallback);
 
 void setup() {
   nh.initNode();
