@@ -5,7 +5,7 @@
 
 int input;
 
-int main(int argc, char const *argv[]) {
+int main(int argc, char *argv[]) {
     ros::init(argc, argv, "input");
     ros::NodeHandle handler;
     int nodeRate = 1000;

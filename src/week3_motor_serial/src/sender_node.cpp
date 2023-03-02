@@ -5,30 +5,30 @@
 #include <cmath>
 
 float pwm;
-double time = 0.0;
+double _time = 0.0;
 
 enum CMD {
     none,
     step,
     square,
     sine
-}
+};
 
 void receive_command(const std_msgs::Int16 &msg) {
   switch (msg.data) {
-    case CMD.step:
-        pwm = time > 0 ? 1 : 0;
+    case step:
+        pwm = _time > 0 ? 1 : 0;
         break;
-    case CMD.square:
-        pwm = time % 2 ? 1 : -1;
+    case square:
+        pwm = std::fmod(_time,2) > 1 ? 1 : -1;
         break;
-    case CMD.sine:
-        pwm = sin(time);
+    case sine:
+        pwm = sin(_time);
         break;
   }
 }
 
-int main(int argc, char const *argv[]) {
+int main(int argc, char *argv[]) {
     ros::init(argc, argv, "sender");
     ros::NodeHandle handler;
     ros::NodeHandle handler2;
@@ -39,7 +39,7 @@ int main(int argc, char const *argv[]) {
     std_msgs::Float32 pwmOut;
     pwmOut.data = 0.0;
     while (ros::ok()) {
-        time = ros::Time::now().toSec();
+        _time = ros::Time::now().toSec();
         pwmOut.data = pwm;
         signalPub.publish(pwmOut);
         ros::spinOnce();
