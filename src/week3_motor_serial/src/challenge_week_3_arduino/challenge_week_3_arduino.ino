@@ -1,33 +1,34 @@
 #include <ros.h>
 #include <std_msgs/Float32.h>
-#define FWD_PIN 1
-#define BWD_PIN 2
-
-void pwmCallback(const std_msgs::Float32 &pwmMsg) {
-  if (pwmMsg.data > 0) {
-    ledcWrite(0, (int)(pwmMsg.data*255));
-    ledcWrite(1, 0);
-  } else {
-    ledcWrite(0, 0);
-    ledcWrite(1, (int)(pwmMsg.data*255));
-  }
-  delay(15);
-}
+#define FWD_PIN 18
+#define BWD_PIN 15
+#define PWM 4
 
 ros::NodeHandle nh;
-ros::Subscriber<std_msgs::Float32> sub("/pwm", &pwmCallback);
+
+void pwmCallback(const std_msgs::Float32 &pwmMsg) {
+  ledcWrite(0, (int)(pwmMsg.data*255));
+  if (pwmMsg.data > 0) {
+    digitalWrite(FWD_PIN, 1);
+    digitalWrite(BWD_PIN, 0);
+  } else {
+    digitalWrite(FWD_PIN, 0);
+    digitalWrite(BWD_PIN, 1);
+  }
+}
+
+ros::Subscriber<std_msgs::Float32> sub("/pwm", pwmCallback);
 
 void setup() {
-  nh.getHardware()->setBaud(57600);
   nh.initNode();
   nh.subscribe(sub);
   ledcSetup(0, 980, 8);
-  ledcSetup(1, 980, 8);
-  ledcAttachPin(FWD_PIN, 0);
-  ledcAttachPin(BWD_PIN, 0);
+  pinMode(FWD_PIN, INPUT);
+  pinMode(BWD_PIN, INPUT);
+  ledcAttachPin(PWM, 0);
 }
 
 void loop() {
   nh.spinOnce();
-  delay(1);
+  delay(500);
 }

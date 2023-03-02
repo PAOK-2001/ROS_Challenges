@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
     ros::init(argc, argv, "sender");
     ros::NodeHandle handler;
     int nodeRate = 57600;
-    ros::Publisher signalPub = handler.advertise<std_msgs::Float32>("/pwm",280);
+    ros::Publisher signalPub = handler.advertise<std_msgs::Float32>("/pwm",10);
     ros::Rate rate(nodeRate);
     std_msgs::Float32 pwmOut;
     int cmd = 0;
