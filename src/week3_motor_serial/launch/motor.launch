@@ -4,7 +4,8 @@
     <node name="sender" pkg="week3_motor_serial" type="sender"  output="screen"/>
     <node name="input" pkg="week3_motor_serial" type="input"  output="screen"/>
     <node name="motor" pkg="rosserial_python" type="serial_node.py">
-    <param name="port"	type="string"	value="/dev/ttyUSB0"/>   
+    <param name="port"	type="string"	value="/dev/ttyUSB0"/>
+    <param name="baud" type="int" value = "57600"/>   
     </node>
     <node name="pwm_plot" pkg="rqt_plot" type="rqt_plot" args="/pwm"/>
     <node name="pwm_graph" pkg="rqt_graph" type="rqt_graph" args=""/>

@@ -31,10 +31,8 @@ void receive_command(const std_msgs::Int16 &msg) {
 int main(int argc, char *argv[]) {
     ros::init(argc, argv, "sender");
     ros::NodeHandle handler;
-    ros::NodeHandle handler2;
-    int nodeRate = 1000;
-    ros::Subscriber cmdSub = handler.subscribe("/input", 10, receive_command);
-    ros::Publisher signalPub = handler2.advertise<std_msgs::Float32>("/pwm",10);
+    int nodeRate = 57600;
+    ros::Publisher signalPub = handler.advertise<std_msgs::Float32>("/pwm",10);
     ros::Rate rate(nodeRate);
     std_msgs::Float32 pwmOut;
     pwmOut.data = 0.0;
