@@ -1,4 +1,4 @@
-# week1_signal_nodes
+# week2_pid_control
 
 ## Results
 ### Fixed setpoint (10)
