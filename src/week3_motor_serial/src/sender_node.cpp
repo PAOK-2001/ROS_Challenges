@@ -4,7 +4,7 @@
 #include <std_msgs/Float32.h>
 #include <cmath>
 
-float pwm;
+float pwm = 0.0;
 double _time = 0.0;
 
 enum CMD {
@@ -14,8 +14,8 @@ enum CMD {
     sine
 };
 
-void receive_command(const std_msgs::Int16 &msg) {
-  switch (msg.data) {
+void define_command(int command) {
+  switch (command) {
     case step:
         pwm = _time > 0 ? 1 : 0;
         break;
@@ -32,12 +32,15 @@ int main(int argc, char *argv[]) {
     ros::init(argc, argv, "sender");
     ros::NodeHandle handler;
     int nodeRate = 57600;
-    ros::Publisher signalPub = handler.advertise<std_msgs::Float32>("/pwm",10);
+    ros::Publisher signalPub = handler.advertise<std_msgs::Float32>("/pwm",280);
     ros::Rate rate(nodeRate);
     std_msgs::Float32 pwmOut;
+    int cmd = 0;
     pwmOut.data = 0.0;
     while (ros::ok()) {
+        ros::param::get("/pwm_type", cmd);
         _time = ros::Time::now().toSec();
+        define_command(cmd);
         pwmOut.data = pwm;
         signalPub.publish(pwmOut);
         ros::spinOnce();

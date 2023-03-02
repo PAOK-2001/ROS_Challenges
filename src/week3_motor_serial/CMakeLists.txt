@@ -140,9 +140,6 @@ include_directories(
 add_executable(sender src/sender_node.cpp)
 target_link_libraries(sender ${catkin_LIBRARIES})
 
-add_executable(input src/input_node.cpp)
-target_link_libraries(input ${catkin_LIBRARIES})
-
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
