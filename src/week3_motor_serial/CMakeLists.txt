@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(motor_control)
+project(week3_motor_serial)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   message_generation
   message_runtime
   rospy
+  roscpp
   std_msgs
 )
 
@@ -136,6 +137,12 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/pid_control_node.cpp)
 
+add_executable(sender src/sender_node.cpp)
+target_link_libraries(sender ${catkin_LIBRARIES})
+
+add_executable(input src/input_node.cpp)
+target_link_libraries(input ${catkin_LIBRARIES})
+
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
@@ -160,10 +167,10 @@ include_directories(
 
 ## Mark executable scripts (Python etc.) for installation
 ## in contrast to setup.py, you can choose the destination
- catkin_install_python(PROGRAMS
-   scripts/Input.py 
-   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
- )
+#  catkin_install_python(PROGRAMS
+#    scripts/Input.py 
+#    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+#  )
 
 ## Mark executables for installation
 ## See http://docs.ros.org/melodic/api/catkin/html/howto/format1/building_executables.html
