@@ -7,7 +7,7 @@
 ros::NodeHandle nh;
 
 void pwmCallback(const std_msgs::Float32 &pwmMsg) {
-  ledcWrite(0, (int)(pwmMsg.data*255));
+  ledcWrite(0, abs((int)(pwmMsg.data*255)));
   if (pwmMsg.data > 0) {
     digitalWrite(FWD_PIN, 1);
     digitalWrite(BWD_PIN, 0);
@@ -20,15 +20,16 @@ void pwmCallback(const std_msgs::Float32 &pwmMsg) {
 ros::Subscriber<std_msgs::Float32> sub("/pwm", pwmCallback);
 
 void setup() {
+  ledcSetup(0, 980, 8);
+  pinMode(FWD_PIN, OUTPUT);
+  pinMode(BWD_PIN, OUTPUT);
+  pinMode(PWM, OUTPUT);
+  ledcAttachPin(PWM, 0);
   nh.initNode();
   nh.subscribe(sub);
-  ledcSetup(0, 980, 8);
-  pinMode(FWD_PIN, INPUT);
-  pinMode(BWD_PIN, INPUT);
-  ledcAttachPin(PWM, 0);
 }
 
 void loop() {
   nh.spinOnce();
-  delay(500);
+  delay(1);
 }
