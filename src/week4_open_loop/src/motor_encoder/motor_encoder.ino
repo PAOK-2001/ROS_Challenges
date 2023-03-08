@@ -1,5 +1,5 @@
+#include <ESP32Encoder.h>
 #include <ros.h>
-#include <Encoder.h>
 #include <std_msgs/Float32.h>
 
 #define FWD_PIN_B 18
@@ -8,15 +8,21 @@
 
 #define ENCR_A 34
 #define ENCR_B 36
+#define PI 3.14159265358979
+
+const int    POLLING_TIME  = 50;
+const double TICKS_PER_REV = 22;
+const double RADS_PER_TICK = (2*PI)/TICKS_PER_REV;
 
 std_msgs::Float32 encB_vel;
 
 long currentPos = -999;
 long oldPos = 0;
+long currTime = millis();
 
 ros::NodeHandle nh;
 
-Encoder encR(ENCR_A,ENCR_B);
+ESP32Encoder encR;
 
 void pwmCallback(const std_msgs::Float32 &pwmMsg){
   ledcWrite(0, abs((int)(pwmMsg.data*255)));
@@ -30,21 +36,29 @@ void pwmCallback(const std_msgs::Float32 &pwmMsg){
 }
 
 void calculateSpeed(int newPos){
+  Serial.println(newPos);
   if (newPos != currentPos){
     currentPos = newPos;
   }
-  encB_vel.data = (currentPos - oldPos)/(POLLING_TIME);
+  encB_vel.data = RADS_PER_TICK*1000*((currentPos - oldPos)/POLLING_TIME); // Rads per second
+  oldPos = currentPos;
 }
 
-ros::Subscriber<std_msgs::Float32> pwm_receiver("/pwm", pwmCallback);
+ros::Subscriber<std_msgs::Float32> pwm_receiver("/motor_input", pwmCallback);
 ros::Publisher motor_velocity("/motor_output", &encB_vel);
 
 void setup() {
+  // Encoder initial setup
+  ESP32Encoder::useInternalWeakPullResistors=UP;
+  encR.attachHalfQuad(ENCR_A, ENCR_B);
+  encR.setCount(0);
+  encR.clearCount();
+  // MOTOR_RIGHT config
   ledcSetup(0, 980, 8);
   pinMode(FWD_PIN_B, OUTPUT);
   pinMode(BWD_PIN_B, OUTPUT);
   pinMode(PWM_B, OUTPUT);
-  
+  // ROS Init
   ledcAttachPin(PWM_B, 0);
   nh.initNode();
   nh.subscribe(pwm_receiver);
@@ -52,8 +66,11 @@ void setup() {
 }
 
 void loop() {
-  calculateSpeed(encR.read());
-  motor_velocity.publish(&encB_vel);
+  if(millis()- currTime >= POLLING_TIME){
+    calculateSpeed(encR.getCount());
+    motor_velocity.publish(&encB_vel);
+    currTime = millis();
+  }
   nh.spinOnce();
-  delay(1);
+  delay(200);
 }
