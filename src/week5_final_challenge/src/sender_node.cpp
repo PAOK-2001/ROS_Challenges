@@ -4,9 +4,9 @@
 #include <std_msgs/Float32.h>
 #include <cmath>
 
-float pwm = 0.0;
+float set_point = 0.0;
 double _time = 0.0;
-
+float ref = 15;
 enum CMD {
     none,
     step,
@@ -17,13 +17,13 @@ enum CMD {
 void define_command(int command) {
   switch (command) {
     case step:
-        pwm = _time > 0 ? 1 : 0;
+        set_point = _time > 0 ? 1 * ref : 0;
         break;
     case square:
-        pwm = std::fmod(_time,2) > 1 ? 1 : -1;
+        set_point = std::fmod(_time,2) > 1 ? 1 * ref : -1 * ref;
         break;
     case sine:
-        pwm = sin(_time);
+        set_point = sin(_time);
         break;
   }
 }
@@ -32,17 +32,17 @@ int main(int argc, char *argv[]) {
     ros::init(argc, argv, "sender");
     ros::NodeHandle handler;
     int nodeRate = 100;
-    ros::Publisher signalPub = handler.advertise<std_msgs::Float32>("/pwm",10);
+    ros::Publisher signalPub = handler.advertise<std_msgs::Float32>("/set_point",10);
     ros::Rate rate(nodeRate);
-    std_msgs::Float32 pwmOut;
+    std_msgs::Float32 set_point_out;
     int cmd = 0;
-    pwmOut.data = 0.0;
+    set_point_out.data = 0.0;
     while (ros::ok()) {
-        ros::param::get("/pwm_type", cmd);
+        ros::param::get("/sp_type", cmd);
         _time = ros::Time::now().toSec();
         define_command(cmd);
-        pwmOut.data = pwm;
-        signalPub.publish(pwmOut);
+        set_point_out.data = set_point;
+        signalPub.publish(set_point_out);
         ros::spinOnce();
         rate.sleep();
     }
