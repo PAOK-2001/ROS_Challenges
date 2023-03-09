@@ -5,42 +5,25 @@
 #include <cmath>
 
 float pwm = 0.0;
-double _time = 0.0;
+float target_speed = 0.0;
+int nodeRate = 100;
 
-enum CMD {
-    none,
-    step,
-    square,
-    sine
-};
-
-void define_command(int command) {
-  switch (command) {
-    case step:
-        pwm = _time > 0 ? 1 : 0;
-        break;
-    case square:
-        pwm = std::fmod(_time,2) > 1 ? 1 : -1;
-        break;
-    case sine:
-        pwm = sin(_time);
-        break;
-  }
+void open_loop_control(float ref) {
+    pwm = ref/15.34;
 }
 
 int main(int argc, char *argv[]) {
     ros::init(argc, argv, "sender");
     ros::NodeHandle handler;
-    int nodeRate = 100;
     ros::Publisher signalPub = handler.advertise<std_msgs::Float32>("/motor_input",10);
     ros::Rate rate(nodeRate);
+
     std_msgs::Float32 pwmOut;
-    int cmd = 0;
     pwmOut.data = 0.0;
+
     while (ros::ok()) {
-        ros::param::get("/pwm_type", cmd);
-        _time = ros::Time::now().toSec();
-        define_command(cmd);
+        ros::param::get("/ref", target_speed);
+        open_loop_control(target_speed);
         pwmOut.data = pwm;
         signalPub.publish(pwmOut);
         ros::spinOnce();
