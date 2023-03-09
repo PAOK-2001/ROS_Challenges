@@ -6,12 +6,12 @@
 #define BWD_PIN_B 15
 #define PWM_B 4
 
-#define ENCR_A 34
-#define ENCR_B 36
+#define ENCR_A 36
+#define ENCR_B 34
 #define PI 3.14159265358979
 
-const int    POLLING_TIME  = 50;
-const double TICKS_PER_REV = 22;
+const int    POLLING_TIME  = 5;
+const double TICKS_PER_REV = 737;
 const double RADS_PER_TICK = (2*PI)/TICKS_PER_REV;
 
 std_msgs::Float32 encB_vel;
@@ -40,7 +40,7 @@ void calculateSpeed(int newPos){
   if (newPos != currentPos){
     currentPos = newPos;
   }
-  encB_vel.data = RADS_PER_TICK*1000*((currentPos - oldPos)/POLLING_TIME); // Rads per second
+  encB_vel.data = (((RADS_PER_TICK*(currentPos - oldPos))*1000)/POLLING_TIME); // Rads per second
   oldPos = currentPos;
 }
 
@@ -72,5 +72,4 @@ void loop() {
     currTime = millis();
   }
   nh.spinOnce();
-  delay(200);
 }
