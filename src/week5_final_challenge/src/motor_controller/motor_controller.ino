@@ -49,7 +49,7 @@ ros::Subscriber<week5_final_challenge::motor_input> pwm_receiver("/motor_input",
 ros::Publisher motor_velocity("/motor_output", &encB_vel);
 
 void setup() {
-  week5_final_challenge::motor_ouput motor_out;
+  week5_final_challenge::motor_output motor_out;
   // Encoder initial setup
   ESP32Encoder::useInternalWeakPullResistors=UP;
   encR.attachHalfQuad(ENCR_A, ENCR_B);
