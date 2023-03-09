@@ -1,6 +1,7 @@
 #include <ESP32Encoder.h>
 #include <ros.h>
-#include <std_msgs/Float32.h>
+#include <week5_final_challenge/motor_output.h>
+#include <week5_final_challenge/motor_input.h>
 
 #define FWD_PIN_B 18
 #define BWD_PIN_B 15
@@ -14,7 +15,7 @@ const int    POLLING_TIME  = 5;
 const double TICKS_PER_REV = 737;
 const double RADS_PER_TICK = (2*PI)/TICKS_PER_REV;
 
-std_msgs::Float32 encB_vel;
+week5_final_challenge::motor_output encB_vel;
 
 long currentPos = -999;
 long oldPos = 0;
@@ -24,9 +25,9 @@ ros::NodeHandle nh;
 
 ESP32Encoder encR;
 
-void pwmCallback(const std_msgs::Float32 &pwmMsg){
-  ledcWrite(0, abs((int)(pwmMsg.data*255)));
-  if (pwmMsg.data > 0) {
+void pwmCallback(const week5_final_challenge::motor_input &pwmMsg){
+  ledcWrite(0, abs((int)(pwmMsg.input*255)));
+  if (pwmMsg.input > 0) {
     digitalWrite(FWD_PIN_B, 1);
     digitalWrite(BWD_PIN_B, 0);
   } else {
@@ -40,14 +41,15 @@ void calculateSpeed(int newPos){
   if (newPos != currentPos){
     currentPos = newPos;
   }
-  encB_vel.data = (((RADS_PER_TICK*(currentPos - oldPos))*1000)/POLLING_TIME); // Rads per second
+  encB_vel.output = (((RADS_PER_TICK*(currentPos - oldPos))*1000)/POLLING_TIME); // Rads per second
   oldPos = currentPos;
 }
 
-ros::Subscriber<std_msgs::Float32> pwm_receiver("/motor_input", pwmCallback);
+ros::Subscriber<week5_final_challenge::motor_input> pwm_receiver("/motor_input", pwmCallback);
 ros::Publisher motor_velocity("/motor_output", &encB_vel);
 
 void setup() {
+  week5_final_challenge::motor_ouput motor_out;
   // Encoder initial setup
   ESP32Encoder::useInternalWeakPullResistors=UP;
   encR.attachHalfQuad(ENCR_A, ENCR_B);

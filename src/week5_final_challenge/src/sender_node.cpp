@@ -3,6 +3,7 @@
 #include <std_msgs/Int16.h>
 #include <std_msgs/Float32.h>
 #include <cmath>
+#include "week5_final_challenge/sender.h"
 
 float set_point = 0.0;
 double _time = 0.0;
@@ -32,16 +33,16 @@ int main(int argc, char *argv[]) {
     ros::init(argc, argv, "sender");
     ros::NodeHandle handler;
     int nodeRate = 100;
-    ros::Publisher signalPub = handler.advertise<std_msgs::Float32>("/set_point",10);
+    ros::Publisher signalPub = handler.advertise<week5_final_challenge::sender>("/set_point",10);
     ros::Rate rate(nodeRate);
-    std_msgs::Float32 set_point_out;
+    week5_final_challenge::sender set_point_out;
     int cmd = 0;
-    set_point_out.data = 0.0;
+    set_point_out.set_point_data = 0.0;
     while (ros::ok()) {
         ros::param::get("/sp_type", cmd);
         _time = ros::Time::now().toSec();
         define_command(cmd);
-        set_point_out.data = set_point;
+        set_point_out.set_point_data = set_point;
         signalPub.publish(set_point_out);
         ros::spinOnce();
         rate.sleep();
