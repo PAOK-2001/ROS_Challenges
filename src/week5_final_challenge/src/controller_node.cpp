@@ -12,12 +12,12 @@
 float motor_out = 0, ref = 0;
 bool motor_init = false;
 
-void receive_feedback(const week2_pid_control::motor_output::ConstPtr &msg) {
+void receive_feedback(const week5_final_challenge::motor_output::ConstPtr &msg) {
   motor_out = msg->output;
   motor_init = true;
 }
 
-void receive_setpoint(const std_msgs::Float32::ConstPtr &setpoint) {
+void receive_setpoint(const week5_final_challenge::sender::ConstPtr &setpoint) {
   ref = setpoint->set_point_data;
 }
 
