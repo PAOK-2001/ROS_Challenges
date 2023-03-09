@@ -5,8 +5,8 @@
         <param name="baud" type="int" value = "57600"/>   
     </node>
 
-    <node name="reference_sender" pkg="week4_open_loop" type="reference_sender"  output="screen"/>
-    <param name="pwm_type" type="int" value="1"/>
+    <node name="open_loop_control" pkg="week4_open_loop" type="open_loop_control"  output="screen"/>
+    <param name="ref" type="double" value="6.6"/>
     <node name="pwm_plot" pkg="rqt_plot" type="rqt_plot" args="/motor_input /motor_output"/>
 
 </launch>
