@@ -12,8 +12,7 @@ Workspace collecting the weekly challenges put forth by Manchester Robotics. Eac
 # Team
 
 - Abraham De Alba Franco
-- Alfredo Onofre Chávez
-- Francisco José Ramírez Aldaco
 - Alejandro Flores Madriz
 - Emil Dobetsberger
+- Francisco José Ramírez Aldaco
 - Pablo Agustín Ortega-Kral
