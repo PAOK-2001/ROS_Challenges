@@ -7,7 +7,7 @@
 
 float set_point = 0.0;
 double _time = 0.0;
-float ref = 15;
+float ref = 5;
 enum CMD {
     none,
     step,
@@ -21,10 +21,10 @@ void define_command(int command) {
         set_point = _time > 0 ? 1 * ref : 0;
         break;
     case square:
-        set_point = std::fmod(_time,2) > 1 ? 1 * ref : -1 * ref;
+        set_point = std::fmod(_time*0.5,2) > 1 ? 1 * ref : -1 * ref;
         break;
     case sine:
-        set_point = sin(_time);
+        set_point = sin(_time*0.5)*ref;
         break;
   }
 }

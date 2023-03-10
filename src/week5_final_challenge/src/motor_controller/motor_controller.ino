@@ -11,7 +11,7 @@
 #define ENCR_B 34
 #define PI 3.14159265358979
 
-const int    POLLING_TIME  = 5;
+const int    POLLING_TIME  = 100;
 const double TICKS_PER_REV = 737;
 const double RADS_PER_TICK = (2*PI)/TICKS_PER_REV;
 
@@ -41,7 +41,7 @@ void calculateSpeed(int newPos){
   if (newPos != currentPos){
     currentPos = newPos;
   }
-  encB_vel.output = (((RADS_PER_TICK*(currentPos - oldPos))*1000)/POLLING_TIME); // Rads per second
+  encB_vel.output = float(((RADS_PER_TICK*(currentPos - oldPos))*1000)/POLLING_TIME); // Rads per second
   oldPos = currentPos;
 }
 

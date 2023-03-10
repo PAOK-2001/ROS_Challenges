@@ -25,7 +25,7 @@ int main(int argc, char* argv[]){
   ros::init(argc, argv, "controller_node");
   ros::NodeHandle handler;
   ros::NodeHandle handler2;
-  int nodeRate = 1000;
+  int nodeRate = 100;
   float Kp, Ti, Td;
   ros::param::get("/Kp",Kp);
   ros::param::get("/Ti",Ti);
@@ -35,7 +35,7 @@ int main(int argc, char* argv[]){
   ros::Publisher controllerOutput = handler2.advertise<week5_final_challenge::motor_input>("/motor_input", 10);
   ros::Subscriber setPointSubscr = handler.subscribe("/set_point", 10, receive_setpoint);
   ros::Rate rate(nodeRate); 
-  double time = ros::Time::now().toSec();
+  double _time = ros::Time::now().toSec();
   float error, rateError, dTime;
   float lastError = 0.0;
   float cumError = 0.0;
@@ -43,22 +43,26 @@ int main(int argc, char* argv[]){
   motor_in.input = 0.0;
   controllerOutput.publish(motor_in);
   while (ros::ok()) {
-    
-        dTime = ros::Time::now().toSec()- time;
-        if(dTime > 0 && motor_init) {
-          time = ros::Time::now().toSec();
+      if(motor_init){
+        dTime = ros::Time::now().toSec()- _time;
+        if(dTime > 0) {
           error = ref - motor_out;
           cumError += error*dTime;
           rateError = (error - lastError) / dTime;
           lastError = error;
           motor_in.input = (Kp*error)+(Td*rateError)+(Ti*cumError);
+          if(abs(motor_in.input)>1){
+            motor_in.input = motor_in.input/abs(motor_in.input);
+          }
           controllerOutput.publish(motor_in);
         } else {
           week5_final_challenge::motor_input motor_in;
           motor_in.input = 0;
           controllerOutput.publish(motor_in);
         }
-        ros::spinOnce();
-        rate.sleep();
+      }
+      _time = ros::Time::now().toSec();
+      ros::spinOnce();
+      rate.sleep();
     }
 }

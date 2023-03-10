@@ -1,5 +1,6 @@
 <?xml version="1.0" ?>
 <launch>
+    <rosparam file = "$(find week5_final_challenge)/config/control_params.yaml" command = "load"/>
     <node name="motor" pkg="rosserial_python" type="serial_node.py" >
         <param name="port"	type="string"	value="/dev/ttyUSB0"/>
         <param name="baud" type="int" value = "57600"/>   
@@ -8,6 +9,6 @@
     <param name="sp_type" type="int" value="1"/>
     <node name="sys_input" pkg="week5_final_challenge" type="sys_input"  output="screen"/>
     <node name="motor_controller" pkg="week5_final_challenge" type="motor_controller"  output="screen"/>
-    <node name="pwm_plot" pkg="rqt_plot" type="rqt_plot" args="/motor_input /motor_output"/>
+    <node name="pwm_plot" pkg="rqt_plot" type="rqt_plot" args="/motor_output/output /motor_input/input /set_point/set_point_data"/>
 
 </launch>
